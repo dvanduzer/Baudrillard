@@ -1,0 +1,10 @@
+[Unit]
+After=etcd-amb-redis.service
+
+[Service]
+ExecStart=/usr/bin/docker run -link etcd-amb-redis.service:etcd -rm -name %n -p 127.0.0.1::6379 polvi/dynamic-etcd-amb redis-A 6379
+ExecStop=/usr/bin/docker stop -t 3 %n
+
+[X-Fleet]
+X-ConditionMachineOf=etcd-amb-redis.service
+

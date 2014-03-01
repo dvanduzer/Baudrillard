@@ -1,0 +1,10 @@
+[Unit]
+Description=Telehash Peer
+After=dashboard.service
+After=etcd.service
+Requires=dashboard.service
+
+[Service]
+ExecStart=/usr/bin/docker run -link redis-dyn-amb.service:redis -rm -name %n telehash/simulycra node /telehash/node/sim.js --id /telethash/sim.json
+ExecStop=/usr/bin/docker stop -t 3 %n
+

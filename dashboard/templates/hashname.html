@@ -1,0 +1,11 @@
+<!doctype html>
+<title>Hashname: {{ me }}</title>
+{% if routing_table %}
+  <h1>My peers:</h1>
+  {% for hn in routing_table %}
+    <a href="/hn/{{ hn }}">{{ hn }}</a>
+  {% endfor %}
+{% else %}
+  <h1>No Routes!</h1>
+{% endif %}
+

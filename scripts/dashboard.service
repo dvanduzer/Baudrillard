@@ -1,0 +1,7 @@
+[Unit]
+Description=Dashboard
+After=etcd.service
+
+[Service]
+ExecStart=/usr/bin/docker run -link redis-dyn-amb.service:redis -p 80:5000 -rm -name %n telehash/dashboard python /dashboard/web.py
+ExecStop=/usr/bin/docker stop -t 3 %n
