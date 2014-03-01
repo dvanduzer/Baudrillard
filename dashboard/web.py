@@ -19,4 +19,4 @@ def display_routes(hashname):
     return render_template('hashname.html', me=hashname, routing_table=routing_table)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
