@@ -1,3 +1,5 @@
 [Service]
-ExecStart=/bin/bash -c "HOST_IP=$(/bin/ifconfig eth0 | awk '/inet /{print $2}') && exec /usr/bin/docker run -rm -name %n -p $HOST_IP::6379 crosbymichael/redis"
+ExecStartPre=/bin/bash -c "HOST_IP=$(/bin/ifconfig eth0 | awk '/inet /{print $2}') && etcdctl set /redis_host $HOST_IP"
+ExecStart=/bin/bash -c "HOST_IP=$(/bin/ifconfig eth0 | awk '/inet /{print $2}') && exec /usr/bin/docker run -rm -name %n -p $HOST_IP:6379:6379 crosbymichael/redis"
+ExecStopPre=/bin/bash -c "etcdctl rm /redis_host"
 ExecStop=/usr/bin/docker stop -t 3 %n

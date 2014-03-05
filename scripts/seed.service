@@ -1,10 +1,8 @@
 [Unit]
 Description=Telehash Peer
-After=dashboard.service
 After=etcd.service
-Requires=dashboard.service
+Requires=redis.service
 
 [Service]
-ExecStart=/usr/bin/docker run -link redis-dyn-amb.service:redis -rm -name %n telehash/simulycra node /telehash/node/sim.js --id /telethash/sim.json
+ExecStart=/bin/bash -c 'REDIS_HOST=$(etcdctl get /redis_host) && /usr/bin/docker run -rm -name %n telehash/simulycra /bin/bash -c "(/usr/bin/mkfifo redis && (/bin/nc -kl 6379 0<redis |/bin/nc $REDIS_HOST 6379 1>redis)&) ; node /telehash/node/sim.js --simtype=seed_list"'
 ExecStop=/usr/bin/docker stop -t 3 %n
-

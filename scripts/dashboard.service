@@ -1,7 +1,8 @@
 [Unit]
 Description=Dashboard
 After=etcd.service
+Requires=redis.service
 
 [Service]
-ExecStart=/usr/bin/docker run -link redis-dyn-amb.service:redis -p 80:5000 -rm -name %n telehash/dashboard python /dashboard/web.py
+ExecStart=/bin/bash -c 'REDIS_HOST=$(etcdctl get /redis_host) && /usr/bin/docker run -p 80:5000 -rm -name %n telehash/baudrillard /bin/bash -c "(/usr/bin/mkfifo redis && (/bin/nc -kl 6379 0<redis |/bin/nc $REDIS_HOST 6379 1>redis)&) ; python /dashboard/web.py"'
 ExecStop=/usr/bin/docker stop -t 3 %n
