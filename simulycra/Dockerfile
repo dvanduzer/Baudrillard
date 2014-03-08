@@ -9,4 +9,4 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 
 ADD . /telehash
-RUN cd /telehash; npm install telehash optimist hiredis redis socket.io
+RUN cd /telehash; npm install telehash optimist hiredis redis socket.io node-etcd

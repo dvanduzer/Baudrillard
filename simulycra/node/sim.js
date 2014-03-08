@@ -50,8 +50,11 @@ safe();
 function init(key)
 {
   var seed = tele.hashname(key, {port:parseInt(argv.port), ip:argv.ip, nolan:argv.nolan});
-  var redis = require("redis"),
-      client = redis.createClient(argv.redisport, argv.redishost);
+  var Etcd = require('node-etcd');
+  var etcd = new Etcd();
+  var redishost = etcd.get("/services/redis");
+  var redis = require('redis'),
+      client = redis.createClient(6379, redishost);
   client.smembers('seed_list', function(err, redis_seeds) {
     redis_seeds.forEach(function(hn){
       client.hgetall("hn/"+hn, function(err, remote) {
