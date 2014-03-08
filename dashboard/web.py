@@ -1,12 +1,14 @@
+import os
 from flask import Flask
 from flask import render_template
+from redis import Redis
 
 app = Flask(__name__)
 
 app.debug=True
 
-from redis import Redis
-redis = Redis()
+redis_host = os.environ.get('REDISHOST', '127.0.0.1')
+redis = Redis(host=redis_host)
 
 @app.route("/")
 def switch_list():
